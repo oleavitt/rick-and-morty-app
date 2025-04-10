@@ -40,7 +40,11 @@ final class CharacterListViewModel: ObservableObject {
 
         do {
             apiResponse = try await networkLayer.fetchJsonData(request: urlRequest, type: RickyAndMortyResponse.self)
-            state = isEmpty ? .empty : .success
+            if apiResponse?.error != nil {
+                state = .empty
+            } else {
+                state = isEmpty ? .empty : .success
+            }
         } catch let decodingError as DecodingError {
             errorMessageInternal = String(localized: "content-could-not-be-decoded")
             self.error = decodingError

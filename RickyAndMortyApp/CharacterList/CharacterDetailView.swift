@@ -19,6 +19,10 @@ struct CharacterDetailView: View {
             detailRow("species", character.species)
             detailRow("status", character.status)
             detailRow("origin", character.origin?.name)
+            if let type = character.type, !type.isEmpty {
+                detailRow("type", type)
+            }
+            detailRow("created", createdDateFormatted)
         }
         .padding(.horizontal)
         .navigationTitle(character.name)
@@ -32,6 +36,15 @@ struct CharacterDetailView: View {
                 .frame(maxWidth: .infinity, alignment: .trailing)
         }
         .padding(.horizontal)
+    }
+
+    private var createdDateFormatted: String? {
+        let isoDateFormatter = ISO8601DateFormatter()
+        isoDateFormatter.formatOptions = [.withFullDate, .withFullTime, .withFractionalSeconds]
+        if let date = isoDateFormatter.date(from: character.created ?? "") {
+            return DateFormatter.localizedString(from: date, dateStyle: .medium, timeStyle: .medium)
+        }
+        return nil
     }
 }
 

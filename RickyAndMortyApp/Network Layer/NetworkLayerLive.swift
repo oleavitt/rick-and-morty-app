@@ -17,7 +17,7 @@ actor NetworkLayerLive: NetworkLayer {
         let (data, response) = try await URLSession.shared.data(for: request)
 
         guard let httpResponse = response as? HTTPURLResponse,
-              (200...299).contains(httpResponse.statusCode)
+              (200...299).contains(httpResponse.statusCode) || httpResponse.statusCode == 404
         else {
             throw URLError(.badServerResponse)
         }
